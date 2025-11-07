@@ -35,7 +35,7 @@ coverImage :  {
 watchHistory: [
     {
         type : Schema.Types.ObjectId,
-        ref : "video"
+        ref : "Video"
     }
 ],
 password : {
