@@ -3,6 +3,9 @@ import { User } from '../models/usermodel.js';
 import { uploadOncloudinary } from "../utils/cloudinary.js"
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { ApiError} from "../utils/ApiError.js"
+
+
+
 const registerUser = asyncHandler(async (req, res) => {
 const {username, email, fullname, password} = req.body
 console.log("Email", email)
@@ -57,10 +60,14 @@ return res.status(201).json(
 )
 
 })
+
+
+
 const loginUser = asyncHandler(async (req, res) => {
-    res.status(200).json({
-        message : "ok"
-    })
+    const {username, email, password} = res.body
+   if (!email || !username){
+    throw new ApiError(400, "Email and Password is Required")
+   }
 })
 
 export {registerUser, loginUser}
