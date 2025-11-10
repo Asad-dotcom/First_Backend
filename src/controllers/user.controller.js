@@ -6,6 +6,17 @@ import { ApiError} from "../utils/ApiError.js"
 
 
 
+const generateAccessAndRefreshTokens = async(userId) => {
+    try {
+const user = await User.findById(userId)
+  const accessTokken =  user.genenateAccessToken() 
+ const refreshToken =  user.generateRefreshTokken()
+    }
+    catch(error){
+        throw new ApiError(500, "Somewent Wrong While Gerenating Access and Refresh Tokken")
+    }
+}
+
 const registerUser = asyncHandler(async (req, res) => {
 const {username, email, fullname, password} = req.body
 console.log("Email", email)
@@ -68,6 +79,17 @@ const loginUser = asyncHandler(async (req, res) => {
    if (!email || !username){
     throw new ApiError(400, "Email and Password is Required")
    }
+ const user =  await user.findOne({
+    $or : [{username}, {email}]
+ })
+if(!user){
+    throw new ApiError(404, "user Doest exist")
+}
+
+const isPasswordValid = await user.isPasswordCorrect(password)
+if(!isPasswordValid){
+    throw new ApiError(401, "Incorrect password")
+}
 })
 
 export {registerUser, loginUser}
